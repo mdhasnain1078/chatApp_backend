@@ -40,7 +40,7 @@ const userSchema = mongoose.Schema({
         required:[true, "Password is required"]
     },
 
-    isAllowTOParticipate: {
+    status: {
         type: Boolean,
         default: false,
     },

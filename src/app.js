@@ -17,15 +17,15 @@ app.use(cookieParser())
 
 // routes import
 import userRouter from './routes/user.routes.js'
-import adminRouter from './routes/admin.routes.js'
-import particiapteRouters from './routes/participate.routes.js'
-import voteRouters from './routes/vote.routes.js'
-
+import messageRouter from './routes/message.routes.js'
+import statusRouter from './routes/status.routes.js'
+import chaitroomRouter from './routes/chaitroom.routes.js'
 //routes declaration
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/takepart", particiapteRouters);
-app.use("/api/v1/vote", voteRouters);
+app.use("/api/v1/message", messageRouter);
+app.use("/api/v1/status", statusRouter);
+app.use("/api/v1/chaitroom", chaitroomRouter);
+
 
 export {app}
 

@@ -5,9 +5,6 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import { Admin } from "../models/admin.model.js";
-
-const pass = "9315810327";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -34,7 +31,6 @@ const registerUser = asyncHandler(async (req, res) => {
   // console.log("password: ", password);
 
   // Validation - not empty
-  let status = "notAdmin";
 
   if (
     [fullName, email, username, password].some((field) => field?.trim() === "")
@@ -42,9 +38,6 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields is required");
   }
 
-  if (pass == password) {
-    status = "Admin"
-  }
   // check if user is already exist: username email
   const existedUser = await User.findOne({ $or: [{ username }, { email }] });
 
@@ -86,7 +79,7 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     username: username.toLowerCase(),
-    status: status
+    status: false
   });
 
   // remove password and refresh token field from response
@@ -358,6 +351,21 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, user, "Cover image updated successfully"))
 });
 
+const getUser = asyncHandler(async(req, res)=>{
+  const {email, username} = req.body;
+  if (email === null && username === null) {
+      throw new ApiError(400, "please provide userusername or email")
+  }
+
+  const user = await User.findOne({
+    $or: [{ username }, { email }]
+  }).select(
+      "-password -refreshToken"
+    );
+
+  return res.status(200).json(new ApiResponse(200, user, "get user sucessfully"))
+})
+
 
 export {
   registerUser,
@@ -369,4 +377,5 @@ export {
   updateAccountDetails,
   updateUserAvatar,
   updateUserCoverImage,
+  getUser
 };
